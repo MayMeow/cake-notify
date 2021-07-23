@@ -9,7 +9,7 @@ use Cake\ORM\Entity;
  * Application Entity
  *
  * @property int $id
- * @property string $node_id
+ * @property int $node_id
  * @property string $name
  * @property string $description
  * @property string $default_state

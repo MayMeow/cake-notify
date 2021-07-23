@@ -9,7 +9,7 @@ use Cake\ORM\Entity;
  * ApplicationLog Entity
  *
  * @property int $id
- * @property string $application_id
+ * @property int $application_id
  * @property string $current_state
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified

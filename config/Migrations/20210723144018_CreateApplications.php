@@ -15,7 +15,7 @@ class CreateApplications extends AbstractMigration
     public function change()
     {
         $table = $this->table('applications');
-        $table->addColumn('node_id', 'string', [
+        $table->addColumn('node_id', 'integer', [
             'default' => null,
             'limit' => 255,
             'null' => false,

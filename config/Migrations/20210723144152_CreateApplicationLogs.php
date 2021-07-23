@@ -15,7 +15,7 @@ class CreateApplicationLogs extends AbstractMigration
     public function change()
     {
         $table = $this->table('application_logs');
-        $table->addColumn('application_id', 'string', [
+        $table->addColumn('application_id', 'integer', [
             'default' => null,
             'limit' => 255,
             'null' => false,
