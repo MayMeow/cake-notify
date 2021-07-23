@@ -77,8 +77,7 @@ class ApplicationsTable extends Table
 
         $validator
             ->scalar('description')
-            ->requirePresence('description', 'create')
-            ->notEmptyString('description');
+            ->allowEmptyString('description');
 
         $validator
             ->scalar('default_state')

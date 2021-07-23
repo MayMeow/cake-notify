@@ -28,7 +28,7 @@ class CreateApplications extends AbstractMigration
         $table->addColumn('description', 'text', [
             'default' => null,
             'limit' => 500,
-            'null' => false,
+            'null' => true,
         ]);
         $table->addColumn('default_state', 'string', [
             'default' => null,

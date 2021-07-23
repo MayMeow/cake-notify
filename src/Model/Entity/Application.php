@@ -11,7 +11,7 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property int $node_id
  * @property string $name
- * @property string $description
+ * @property string|null $description
  * @property string $default_state
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
