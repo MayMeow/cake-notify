@@ -63,3 +63,9 @@ docker-compose -f dev-docker.yml run --rm cakephp composer install
 ```bash
 docker-compose -f dev-docker.yml up -d
 ```
+
+acccess to cake console
+
+```bash
+docker-compose -f dev-docker.yml run --rm cakephp php bin/cake.php
+```
