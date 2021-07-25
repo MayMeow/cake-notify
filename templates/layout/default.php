@@ -46,6 +46,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             <a href="<?= $this->Url->build(['controller' => 'Applications', 'action' => 'index']) ?>">Applications</a>
             <a href="<?= $this->Url->build(['controller' => 'ApplicationLogs', 'action' => 'index']) ?>">Application Logs</a>
             <a href="<?= $this->Url->build(['controller' => 'ConfigurationSets', 'action' => 'index']) ?>">Configuration Sets</a>
+            <a href="<?= $this->Url->build(['controller' => 'Users', 'action' => 'logout']) ?>">Logout</a>
         </div>
     </nav>
     <main class="main">
