@@ -1,0 +1,92 @@
+version: "3.7"
+
+networks:
+  frontend:
+    external: true
+  cakenotify_backend:
+    internal: true
+
+services:
+  cakenotify-app:
+    build:
+      args:
+        user: cakenotify
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    container_name: cakenotify_app
+    restart: unless-stopped
+    working_dir: /var/www/
+    command: "/usr/local/bin/docker-entry"
+    networks:
+      - cakenotify_backend
+    environment:
+      DB_HOST: cakenotify_pg
+      DB_PASSWORD: /run/secrets/db_password
+      DB_NAME: /run/secrets/db_name
+      DB_USER: /run/secrets/db_user
+    secrets:
+      - db_password
+      - db_user
+      - db_name
+    depends_on:
+      - cakenotify-db
+      - cakenotify-redis
+    volumes:
+      - /var/www
+
+  cakenotify-db:
+    image: postgres:12.4
+    container_name: cakenotify_pg
+    networks:
+      - cakenotify_backend
+    restart: unless-stopped
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    secrets:
+      - db_password
+      - db_user
+      - db_name
+    environment:
+      POSTGRES_PASSWORD: /run/secrets/db_password
+      POSTGRES_USER: /run/secrets/db_user
+      POSTGRES_DB: /run/secrets/db_name
+
+  cakenotify-nginx:
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    container_name: cakenotify_nginx
+    networks:
+      - cakenotify_backend
+      - frontend
+    volumes_from:
+      - cakenotify-app
+    ports:
+      - "8088:80"
+    restart: unless-stopped
+    depends_on:
+      - cakenotify-app
+      - cakenotify-db
+      - cakenotify-redis
+
+  cakenotify-redis:
+    image: "redis:alpine"
+    container_name: cakenotify_redis
+    networks:
+      - cakenotify_backend
+
+  # if you need graphic acces to application database
+  # adminer:
+  #   image: adminer
+  #   networks:
+  #     - frontend
+  #   restart: always
+
+secrets:
+  db_password:
+    file: ./postgres_password.txt
+  db_user:
+    file: ./postgres_user.txt
+  db_name:
+    file: ./postgres_db_name.txt

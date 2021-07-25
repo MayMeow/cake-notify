@@ -1,0 +1,13 @@
+docker/*
+vendor/*
+node_modules/*
+tmp/*
+.git/*
+.idea/*
+.devcontainer/*
+.github/*
+postgres_db_name.txt
+postgres_password.txt
+postgres_user.txt
+config/app_local.php
+data

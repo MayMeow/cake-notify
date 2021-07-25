@@ -58,6 +58,12 @@ custom styles.
 docker-compose -f dev-docker.yml run --rm cakephp composer install
 ```
 
+## Create new user
+
+```bash
+docker-compose -f dev-docker.yml run --rm cakephp php bin/cake.php add_user -u user@email.tld -p yourPassword
+```
+
 ## Run dev server
 
 ```bash
