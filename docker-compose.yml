@@ -21,6 +21,7 @@ services:
     networks:
       - cakenotify_backend
     environment:
+      DEBUG: false
       DB_HOST: cakenotify_pg
       REDIS_HOST: cakenotify_redis
       DB_PASSWORD: /run/secrets/db_password
@@ -63,13 +64,23 @@ services:
       - frontend
     volumes_from:
       - cakenotify-app
-    ports:
-      - "8088:80"
+    # ports:
+    #   - "8088:80"
     restart: unless-stopped
     depends_on:
       - cakenotify-app
       - cakenotify-db
       - cakenotify-redis
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cakenotify.rule=Host(`cakenotify.cloud.themaymeow.com`)"
+      - "traefik.http.routers.cakenotify.entrypoints=web,websecure"
+      - "traefik.http.routers.cakenotify.tls.certresolver=le"
+      - "traefik.http.routers.cakenotify.tls.options=mytls@file"
+      - "traefik.http.services.cakenotify.loadbalancer.server.port=80"
+      - "traefik.http.routers.cakenotify.service=cakenotify"
+      - "traefik.docker.network=frontend"
+
 
   cakenotify-redis:
     image: "redis:alpine"
