@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Form\TwilioConfgurationSetForm;
+use App\Shared\Value\ConfigurationSetType;
+
 /**
  * ConfigurationSets Controller
  *
@@ -57,6 +60,27 @@ class ConfigurationSetsController extends AppController
             $this->Flash->error(__('The configuration set could not be saved. Please, try again.'));
         }
         $this->set(compact('configurationSet'));
+    }
+
+    /**
+     * @return \Cake\Http\Response|null|void
+     */
+    public function addTwilio()
+    {
+        $twilioForm = new TwilioConfgurationSetForm();
+
+        if ($this->request->is('post')) {
+            $configurationSet = $this->ConfigurationSets->newEmptyEntity();
+
+            $configurationSet->type = ConfigurationSetType::$twilio;
+            $configurationSet->config_set = json_encode($this->request->getData());
+
+            if ($this->ConfigurationSets->save($configurationSet)) {
+                return $this->redirect(['action' => 'index']);
+            }
+        }
+
+        $this->set(compact('twilioForm'));
     }
 
     /**
