@@ -44,9 +44,19 @@ Next important thing is to add Twilio SMS configuration. You can get details on 
 
 ## Update
 
-Since this skeleton is a starting point for your application and various files
-would have been modified as per your needs, there isn't a way to provide
-automated upgrades, so you have to do any updates manually.
+**It is important for you to backup your databse before update**
+
+Fetch and pull repository changes then run:
+
+```bash
+docker-compose build
+```
+
+and
+
+```bash
+docker-compose up -d
+```
 
 ## Configuration
 
