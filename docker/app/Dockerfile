@@ -1,4 +1,4 @@
-FROM php:7.4.16-cli-buster
+FROM php:7.4.16-fpm-buster
 
 # arguments in docker-compose file
 ARG user
