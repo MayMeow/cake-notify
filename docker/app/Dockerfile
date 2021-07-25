@@ -43,13 +43,13 @@ COPY . /var/www
 
 RUN chown -R $user:$user /var/www
 
-RUN chmod -R 777 /var/www/logs
-
 # Set working directory
 WORKDIR /var/www
 
 RUN mv docker-entry.sh /usr/local/bin/docker-entry
 
 RUN composer install --no-ansi --no-dev --no-interaction --no-plugins --no-progress --optimize-autoloader #--no-scripts
+
+RUN chmod -R 777 /var/www/logs
 
 USER $user
