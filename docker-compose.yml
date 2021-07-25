@@ -19,6 +19,7 @@ services:
     working_dir: /var/www/
     command: "/usr/local/bin/docker-entry"
     networks:
+      - frontend
       - cakenotify_backend
     environment:
       DEBUG: 'false'
