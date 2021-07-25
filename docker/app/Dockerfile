@@ -34,9 +34,18 @@ RUN curl -sSL https://getcomposer.org/installer | php \
 RUN apt autoremove --purge \
     && apt clean
 
+# Create system user to run Composer and Artisan Commands
+RUN useradd -G www-data,root -u $uid -d /home/$user $user
+RUN mkdir -p /home/$user/.composer && \
+    chown -R $user:$user /home/$user
+
 COPY . /var/www
+
+RUN chown -R $user:$user /var/www
 
 # Set working directory
 WORKDIR /var/www
+
+RUN composer install --no-ansi --no-dev --no-interaction --no-plugins --no-progress --optimize-autoloader #--no-scripts 
 
 USER $user
