@@ -7,6 +7,7 @@ use Api\Controller\AppController;
 use App\Exceptions\WrongApiKeyException;
 use App\Shared\Value\ConfigurationSetType;
 use App\Shared\Value\TwilioConfiguration;
+use Cake\Utility\Text;
 use Twilio\Rest\Client;
 
 /**
@@ -43,7 +44,6 @@ class ApplicationsController extends AppController
         $applicationLog = $this->ApplicationLogManager->getLastLogForApplication($application->id);
 
         $newState = $this->request->getData('state');
-
         $newLog = $this->ApplicationLogs->newEmptyEntity();
 
         try {
@@ -58,11 +58,17 @@ class ApplicationsController extends AppController
 
                     $client = new Client($twilioCfg->getSid(), $twilioCfg->getToken());
 
+                    $message = Text::insert('State change on :host for :application to :state', [
+                        'host' => $application->node->name,
+                        'application' => $application->name,
+                        'state' => $newState
+                    ]);
+
                     $client->messages->create(
                         $application->node->description,
                         [
                             'from' => $twilioCfg->getSender(),
-                            'body' => "State change on $application->name to $newState"
+                            'body' => $message
                         ]
                     );
                 }

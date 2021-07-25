@@ -8,5 +8,5 @@ use Cake\Datasource\EntityInterface;
 
 interface ApplicationLogManagerServiceInterface
 {
-    public function getLastLogForApplication(int $id = null) : EntityInterface;
+    public function getLastLogForApplication(int $id = null) : ?EntityInterface;
 }

@@ -24,7 +24,7 @@ class ApplicationLogManagerService extends AppService implements ApplicationLogM
      * @param int|null $id
      * @return EntityInterface|ApplicationLog
      */
-    public function getLastLogForApplication(int $id = null): EntityInterface
+    public function getLastLogForApplication(int $id = null): ?EntityInterface
     {
         return $this->ApplicationLogs->find()->where(['ApplicationLogs.application_id' => $id])
             ->orderDesc('created')->first();
