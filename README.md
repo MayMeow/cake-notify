@@ -64,7 +64,31 @@ docker-compose -f dev-docker.yml run --rm cakephp composer install
 docker-compose -f dev-docker.yml run --rm cakephp php bin/cake.php add_user -u user@email.tld -p yourPassword
 ```
 
-## Run dev server
+* `-u`: use email as username
+
+## Change status for application
+
+```bash
+curl -i --data state=1 -H "__token__:<change-to-your-token>" https://<change-to-server-address>/api/v1/applications/create-log/<application-id>.json
+```
+
+You will obtain your token from your user details.
+
+## Changin status code from bash script
+
+```bash
+#!/bin/bash
+SERVER_URL="<your-server-url>"
+APP_ID="1"
+AUTH_TOKEN="<your-auth-token>"
+
+#  ... your commands here
+
+statuscode=$?
+curl -i --data state=${statuscode} -H "__token__:${AUTH_TOKEN}" https://${SERVER_URL}/api/v1/applications/create-log/${APP_ID}.json 
+```
+
+## Run development server
 
 ```bash
 docker-compose -f dev-docker.yml up -d
