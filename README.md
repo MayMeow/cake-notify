@@ -1,8 +1,11 @@
-# CakePHP Application Skeleton
+# WIP CakeNotify Application
 
-![Build Status](https://github.com/cakephp/app/actions/workflows/ci.yml/badge.svg?branch=master)
-[![Total Downloads](https://img.shields.io/packagist/dt/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app)
-[![PHPStan](https://img.shields.io/badge/PHPStan-level%207-brightgreen.svg?style=flat-square)](https://github.com/phpstan/phpstan)
+***This application is in early stage of development, and it's not intended for production use for now***
+
+This is simple notification application. It will send SMS via Twilio gateway when state of application is changed or state is different from default application state (the later is plaed feature). You will need
+create account on twilio to using this app.
+
+This application is made with CakePHP
 
 A skeleton for creating applications with [CakePHP](https://cakephp.org) 4.x.
 
@@ -10,29 +13,34 @@ The framework source code can be found here: [cakephp/cakephp](https://github.co
 
 ## Installation
 
-1. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
-2. Run `php composer.phar create-project --prefer-dist cakephp/app [app_name]`.
+To run this application you will need to have installed [Docker](https://docs.docker.com/get-docker/) and running Traefik for SSL and proxying request to application. Docker compose configuration contains
 
-If Composer is installed globally, run
+* application image based on PHP-FPM
+* Nginx
+* Posgtres 12.4
+* Redis
 
-```bash
-composer create-project --prefer-dist cakephp/app
-```
-
-In case you want to use a custom app dir name (e.g. `/myapp/`):
+First you need to build application
 
 ```bash
-composer create-project --prefer-dist cakephp/app myapp
+docker-compose build
 ```
 
-You can now either use your machine's webserver to view the default home page, or start
-up the built-in webserver with:
+and run it
 
 ```bash
-bin/cake server -p 8765
+docker-compose up -d
 ```
 
-Then visit `http://localhost:8765` to see the welcome page.
+Application on start runs migrations automatically. Next you will need to create your user. Its not possible to creat it over web interface for now. You can add your user with cakephp console:
+
+```bash
+docker-compose run --rm cakenotify-app php bin/cake.php add_user -u your@email -p paSSw0rd
+```
+
+After this you can log in. Go to your user details for api_token. You will need it to change application status trough api.
+
+Next important thing is to add Twilio SMS configuration. You can get details on your Twilio account details.
 
 ## Update
 
@@ -51,12 +59,6 @@ Other environment agnostic settings can be changed in `config/app.php`.
 The app skeleton uses [Milligram](https://milligram.io/) (v1.3) minimalist CSS
 framework by default. You can, however, replace it with any other library or
 custom styles.
-
-## Install
-
-```bash
-docker-compose -f dev-docker.yml run --rm cakephp composer install
-```
 
 ## Create new user
 
@@ -90,8 +92,17 @@ curl -i --data state=${statuscode} -H "__token__:${AUTH_TOKEN}" https://${SERVER
 
 ## Run development server
 
+You will need to install docker / Docker desktop server to develop this application. Development dokcer contains custom app image for development [maymeow/php-ci-cd](https://github.com/MayMeow/php-ci-cd), 
+postgres server and redis server.
+
 ```bash
 docker-compose -f dev-docker.yml up -d
+```
+
+installing composer packages
+
+```bash
+docker-compose -f dev-docker.yml run --rm cakephp composer install
 ```
 
 acccess to cake console
