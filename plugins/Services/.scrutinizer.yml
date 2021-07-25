@@ -1,0 +1,44 @@
+imports:
+    - php
+
+build:
+    nodes:
+        php72:
+            environment:
+                php: '7.2'
+
+        php73:
+            environment:
+                php: '7.3'
+
+        php74:
+            environment:
+                php: '7.4'
+            tests:
+                override:
+                    - php-scrutinizer-run --enable-security-analysis
+                    -
+                        command: 'vendor/bin/phpunit --coverage-clover=coverage.xml'
+                        coverage:
+                            file: 'coverage.xml'
+                            format: 'clover'
+
+filter:
+    excluded_paths:
+        - docs/
+        - tests/
+
+tools:
+    php_mess_detector: true
+    php_cpd:
+        excluded_dirs:
+            - docs/
+            - tests/
+    php_loc:
+        excluded_dirs:
+            - docs/
+            - tests/
+    php_pdepend:
+        excluded_dirs:
+            1: docs/
+            2: tests/
