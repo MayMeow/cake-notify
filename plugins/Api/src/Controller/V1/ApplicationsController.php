@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Api\Controller\V1;
 
 use Api\Controller\AppController;
+use App\Exceptions\WrongApiKeyException;
 use App\Shared\Value\ConfigurationSetType;
 use App\Shared\Value\TwilioConfiguration;
 use Twilio\Rest\Client;
@@ -15,6 +16,7 @@ use Twilio\Rest\Client;
  * @property \App\Model\Table\ApplicationLogsTable $ApplicationLogs
  * @property \App\Service\ConfigurationSetManagerServiceInterface $ConfigurationSetManager
  * @property \App\Service\ApplicationLogManagerServiceInterface $ApplicationLogManager
+ * @property \App\Service\UserManagerServiceInterface $UserManager
  */
 class ApplicationsController extends AppController
 {
@@ -26,6 +28,7 @@ class ApplicationsController extends AppController
         $this->loadModel('ApplicationLogs');
         $this->loadService('ConfigurationSetManager');
         $this->loadService('ApplicationLogManager');
+        $this->loadService('UserManager');
     }
 
     /**
@@ -41,32 +44,43 @@ class ApplicationsController extends AppController
 
         $newState = $this->request->getData('state');
 
-        if ($applicationLog && $application->node->description!= '') {
-            if ($applicationLog->current_state != $newState) {
+        $newLog = $this->ApplicationLogs->newEmptyEntity();
 
-                $cfgSet = $this->ConfigurationSetManager->getConfiguration(ConfigurationSetType::$twilio);
-                $twilioCfg = new TwilioConfiguration();
-                $twilioCfg->load($cfgSet);
+        try {
+            $this->UserManager->verifyApiToken($this->request->getHeader('__token__')[0]);
 
-                $client = new Client($twilioCfg->getSid(), $twilioCfg->getToken());
+            if ($applicationLog && $application->node->description!= '') {
+                if ($applicationLog->current_state != $newState) {
 
-                $client->messages->create(
-                    $application->node->description,
-                    [
-                        'from' => $twilioCfg->getSender(),
-                        'body' => "State change on $application->name to $newState"
-                    ]
-                );
+                    $cfgSet = $this->ConfigurationSetManager->getConfiguration(ConfigurationSetType::$twilio);
+                    $twilioCfg = new TwilioConfiguration();
+                    $twilioCfg->load($cfgSet);
+
+                    $client = new Client($twilioCfg->getSid(), $twilioCfg->getToken());
+
+                    $client->messages->create(
+                        $application->node->description,
+                        [
+                            'from' => $twilioCfg->getSender(),
+                            'body' => "State change on $application->name to $newState"
+                        ]
+                    );
+                }
             }
+
+            $message = 'Success';
+
+            $newLog->current_state = $newState;
+            $newLog->application_id = $application->id;
+
+            $this->ApplicationLogs->save($newLog);
+
+        } catch (WrongApiKeyException $e) {
+            $message = $e->getMessage();
         }
 
-        $newLog = $this->ApplicationLogs->newEmptyEntity();
-        $newLog->current_state = $newState;
-        $newLog->application_id = $application->id;
-
-        $this->ApplicationLogs->save($newLog);
-
         $this->set('newLog', $newLog);
-        $this->viewBuilder()->setOption('serialize', 'newLog');
+        $this->set('message', $message);
+        $this->viewBuilder()->setOption('serialize', ['newLog', 'message']);
     }
 }
