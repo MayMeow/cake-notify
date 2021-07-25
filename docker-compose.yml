@@ -22,6 +22,7 @@ services:
       - cakenotify_backend
     environment:
       DB_HOST: cakenotify_pg
+      REDIS_HOST: cakenotify_redis
       DB_PASSWORD: /run/secrets/db_password
       DB_NAME: /run/secrets/db_name
       DB_USER: /run/secrets/db_user

@@ -14,6 +14,7 @@ services:
     - ./:/app
     environment:
       DB_HOST: cakephp_db
+      REDIS_HOST: cakephp_redis
       DB_PASSWORD: /run/secrets/db_password
       DB_NAME: /run/secrets/db_name
       DB_USER: /run/secrets/db_user
@@ -38,9 +39,15 @@ services:
       POSTGRES_USER: /run/secrets/db_user
       POSTGRES_DB: /run/secrets/db_name
 
+  cakephp-redis:
+    image: "redis:alpine"
+    container_name: cakephp_redis
+    networks:
+      - cakenotify_backend
+
 volumes:
   db_data:
-  
+
 secrets:
   db_password:
     file: ./postgres_password.txt

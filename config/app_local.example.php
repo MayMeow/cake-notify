@@ -5,6 +5,9 @@
  * Note: It is not recommended to commit files with credentials such as app_local.php
  * into source code version control.
  */
+
+use Cake\Cache\Engine\RedisEngine;
+
 return [
     /*
      * Debug Level:
@@ -91,6 +94,63 @@ return [
             'password' => null,
             'client' => null,
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
+        ],
+    ],
+
+    /*
+    * Configure the cache adapters.
+    */
+    'Cache' => [
+        'default' => [
+            'className' => RedisEngine::class,
+            'host' => env('REDIS_HOST', null),
+            'port' => 6379,
+            # 'path' => CACHE,
+            # 'url' => env('CACHE_DEFAULT_URL', null),
+        ],
+
+        /*
+         * Configure the cache used for general framework caching.
+         * Translation cache files are stored with this configuration.
+         * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
+         * If you set 'className' => 'Null' core cache will be disabled.
+         */
+        '_cake_core_' => [
+            'className' => RedisEngine::class,
+            'prefix' => 'myapp_cake_core_',
+            'host' => env('REDIS_HOST', null),
+            'port' => 6379,
+            'serialize' => true,
+            'duration' => '+1 years',
+        ],
+
+        /*
+         * Configure the cache for model and datasource caches. This cache
+         * configuration is used to store schema descriptions, and table listings
+         * in connections.
+         * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
+         */
+        '_cake_model_' => [
+            'className' => RedisEngine::class,
+            'prefix' => 'myapp_cake_model_',
+            'host' => env('REDIS_HOST', null),
+            'port' => 6379,
+            'serialize' => true,
+            'duration' => '+1 years',
+        ],
+
+        /*
+         * Configure the cache for routes. The cached routes collection is built the
+         * first time the routes are processed through `config/routes.php`.
+         * Duration will be set to '+2 seconds' in bootstrap.php when debug = true
+         */
+        '_cake_routes_' => [
+            'className' => RedisEngine::class,
+            'prefix' => 'myapp_cake_routes_',
+            'host' => env('REDIS_HOST', null),
+            'port' => 6379,
+            'serialize' => true,
+            'duration' => '+1 years',
         ],
     ]
 ];
