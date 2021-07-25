@@ -43,6 +43,8 @@ COPY . /var/www
 
 RUN chown -R $user:$user /var/www
 
+RUN chmod -R 777 /var/www/logs
+
 # Set working directory
 WORKDIR /var/www
 
