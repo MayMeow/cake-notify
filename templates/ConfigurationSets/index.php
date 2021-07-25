@@ -5,6 +5,7 @@
  */
 ?>
 <div class="configurationSets index content">
+    <?= $this->Html->link(__('New SMS Configuration'), ['action' => 'add-twilio'], ['class' => 'button float-right', 'style' => 'margin-left: 5px']) ?>
     <?= $this->Html->link(__('New Configuration Set'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Configuration Sets') ?></h3>
     <div class="table-responsive">
@@ -13,7 +14,6 @@
                 <tr>
                     <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('type') ?></th>
-                    <th><?= $this->Paginator->sort('config_set') ?></th>
                     <th><?= $this->Paginator->sort('created') ?></th>
                     <th><?= $this->Paginator->sort('modified') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
@@ -24,7 +24,6 @@
                 <tr>
                     <td><?= $this->Number->format($configurationSet->id) ?></td>
                     <td><?= h($configurationSet->type) ?></td>
-                    <td><?= h($configurationSet->config_set) ?></td>
                     <td><?= h($configurationSet->created) ?></td>
                     <td><?= h($configurationSet->modified) ?></td>
                     <td class="actions">

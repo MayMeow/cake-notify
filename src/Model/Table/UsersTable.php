@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\Auth\DefaultPasswordHasher;
+use Cake\Event\EventInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\Utility\Security;
 use Cake\Validation\Validator;
 
 /**
@@ -72,13 +75,13 @@ class UsersTable extends Table
         $validator
             ->scalar('api_key')
             ->maxLength('api_key', 255)
-            ->requirePresence('api_key', 'create')
+            //->requirePresence('api_key', 'create')
             ->notEmptyString('api_key');
 
         $validator
             ->scalar('api_key_plain')
             ->maxLength('api_key_plain', 255)
-            ->requirePresence('api_key_plain', 'create')
+            //->requirePresence('api_key_plain', 'create')
             ->notEmptyString('api_key_plain');
 
         return $validator;
@@ -96,5 +99,23 @@ class UsersTable extends Table
         $rules->add($rules->isUnique(['email']), ['errorField' => 'email']);
 
         return $rules;
+    }
+
+    public function beforeSave(EventInterface $event)
+    {
+        $entity = $event->getData('entity');
+
+        if ($entity->isNew()) {
+            $hasher = new DefaultPasswordHasher();
+
+            // Generate an API 'token'
+            $entity->api_key_plain = Security::hash(Security::randomBytes(32), 'sha256', false);
+
+            // Bcrypt the token so BasicAuthenticate can check
+            // it during login.
+            $entity->api_key = $hasher->hash($entity->api_key_plain);
+        }
+
+        return true;
     }
 }

@@ -23,14 +23,6 @@
                     <td><?= h($user->email) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Password') ?></th>
-                    <td><?= h($user->password) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Api Key') ?></th>
-                    <td><?= h($user->api_key) ?></td>
-                </tr>
-                <tr>
                     <th><?= __('Api Key Plain') ?></th>
                     <td><?= h($user->api_key_plain) ?></td>
                 </tr>

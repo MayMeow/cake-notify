@@ -23,10 +23,6 @@
                     <td><?= h($configurationSet->type) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Config Set') ?></th>
-                    <td><?= h($configurationSet->config_set) ?></td>
-                </tr>
-                <tr>
                     <th><?= __('Id') ?></th>
                     <td><?= $this->Number->format($configurationSet->id) ?></td>
                 </tr>

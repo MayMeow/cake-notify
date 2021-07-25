@@ -92,5 +92,5 @@ return [
             'client' => null,
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
         ],
-    ],
+    ]
 ];
