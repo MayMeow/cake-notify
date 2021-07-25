@@ -44,6 +44,8 @@ class Application extends BaseApplication
      */
     public function bootstrap(): void
     {
+        $this->addPlugin('Api');
+
         // Call parent to load bootstrap from files.
         parent::bootstrap();
 
@@ -100,9 +102,7 @@ class Application extends BaseApplication
 
             // Cross Site Request Forgery (CSRF) Protection Middleware
             // https://book.cakephp.org/4/en/controllers/middleware.html#cross-site-request-forgery-csrf-middleware
-            ->add(new CsrfProtectionMiddleware([
-                'httponly' => true,
-            ]));
+            ->add($this->getCsrfProtectionMiddleware());
 
         return $middlewareQueue;
     }
@@ -136,5 +136,20 @@ class Application extends BaseApplication
         $this->addPlugin('Migrations');
 
         // Load more plugins here
+    }
+
+    public function getCsrfProtectionMiddleware() : CsrfProtectionMiddleware
+    {
+        $csrf = new CsrfProtectionMiddleware([
+            'httponly' => true,
+        ]);
+
+        $csrf->skipCheckCallback(function ($request) {
+            if($request->getParam('plugin') == 'Api') {
+                return true;
+            }
+        });
+
+        return $csrf;
     }
 }
