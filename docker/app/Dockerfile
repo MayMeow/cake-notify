@@ -46,6 +46,9 @@ RUN chown -R $user:$user /var/www
 # Set working directory
 WORKDIR /var/www
 
-RUN composer install --no-ansi --no-dev --no-interaction --no-plugins --no-progress --optimize-autoloader #--no-scripts 
+RUN mv docker-entry.sh /usr/local/bin/docker-entry \
+    && cp config/app_local.docker.php config/app_local.php
+
+RUN composer install --no-ansi --no-dev --no-interaction --no-plugins --no-progress --optimize-autoloader #--no-scripts
 
 USER $user
