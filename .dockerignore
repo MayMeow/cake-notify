@@ -11,3 +11,6 @@ postgres_password.txt
 postgres_user.txt
 config/app_local.php
 data
+
+.emv
+.env.*
