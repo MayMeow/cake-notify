@@ -11,5 +11,5 @@
     <?= $this->Form->submit(__('Login')); ?>
     <?= $this->Form->end() ?>
 
-    <p>CakeNotify v0.19</p>
+    <p>CakeNotify v0.21</p>
 </div>
