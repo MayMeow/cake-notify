@@ -7,6 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: cake
     working_dir: /app
+    entrypoint: ["dockerize", "-wait", "file:///app/config/app_local.php", "-wait", "tcp://cakephp_db:5432", "-timeout", "2700s", "-wait-retry-interval", "10s"]
     command: php bin/cake.php server -H 0.0.0.0
     ports:
     - 8765:8765
@@ -24,6 +25,42 @@ services:
       - db_name
     depends_on:
       - cakephp-db
+      - cakephp-migrate
+      - cakephp-redis
+
+  composer:
+    build:
+      context: ./docker/devcontainer
+      dockerfile: Dockerfile
+    container_name: composer
+    working_dir: /app
+    command: composer install
+    volumes:
+      - ./:/app
+
+  cakephp-migrate:
+    build:
+      context: ./docker/devcontainer
+      dockerfile: Dockerfile
+    container_name: cakephp-migrate
+    working_dir: /app
+    entrypoint: ["dockerize", "-wait", "file:///app/config/app_local.php", "-wait", "tcp://cakephp_db:5432", "-timeout", "2700s", "-wait-retry-interval", "10s"]
+    command: php bin/cake.php migrations migrate
+    volumes:
+      - ./:/app
+    environment:
+      DB_HOST: cakephp_db
+      REDIS_HOST: cakephp_redis
+      DB_PASSWORD: /run/secrets/db_password
+      DB_NAME: /run/secrets/db_name
+      DB_USER: /run/secrets/db_user
+    secrets:
+      - db_password
+      - db_user
+      - db_name
+    depends_on:
+      - cakephp-db
+      - composer
 
   cakephp-db:
     image: postgres:12.4
@@ -42,8 +79,6 @@ services:
   cakephp-redis:
     image: "redis:alpine"
     container_name: cakephp_redis
-    networks:
-      - cakenotify_backend
 
 volumes:
   db_data:
