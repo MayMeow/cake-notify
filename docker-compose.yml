@@ -37,10 +37,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./data/db:/var/lib/postgresql/data
-    environment:
-      POSTGRES_PASSWORD: T75qdx8XN7QPPz9Ca7EZKN8T
-      POSTGRES_USER: cake_notify
-      POSTGRES_DB: cake_notify_prod
+    env_file: .env.production
 
   cakenotify-nginx:
     build:
