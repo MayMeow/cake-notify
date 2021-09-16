@@ -58,7 +58,7 @@ services:
       - cakenotify-redis
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.cakenotify.rule=Host(`cakenotify.cloud.themaymeow.com`)"
+      - "traefik.http.routers.cakenotify.rule=Host(`cakenotify.$CLOUD_DOMAIN`)"
       - "traefik.http.routers.cakenotify.entrypoints=web,websecure"
       - "traefik.http.routers.cakenotify.tls.certresolver=le"
       - "traefik.http.routers.cakenotify.tls.options=mytls@file"
