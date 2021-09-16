@@ -19,7 +19,6 @@ services:
     container_name: cakenotify_app
     restart: unless-stopped
     working_dir: /var/www/
-    command: "/usr/local/bin/docker-entry"
     networks:
       - frontend
       - cakenotify_backend
