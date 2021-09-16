@@ -1,4 +1,4 @@
-FROM ghcr.io/maymeow/php-ci-cd/php-ci-cd:7.4.16-cs-1 AS build_env
+FROM ghcr.io/maymeow/php-ci-cd/php-ci-cd:7.4.16-cs-1 AS build-env
 
 WORKDIR /app
 
