@@ -8,12 +8,13 @@ networks:
 
 services:
   cakenotify-app:
-    build:
-      args:
-        user: cakenotify
-        uid: 1000
-      context: ./
-      dockerfile: ./docker/app/Dockerfile
+    # build:
+    #   args:
+    #     user: cakenotify
+    #     uid: 1000
+    #   context: ./
+    #   dockerfile: ./docker/app/Dockerfile
+    image: ghcr.io/maymeow/cake-notify/cake-notify:latest
     env_file: .env.production
     container_name: cakenotify_app
     restart: unless-stopped
