@@ -23,14 +23,9 @@ To run this application you will need to have installed [Docker](https://docs.do
 First you need to build application
 
 ```bash
-docker-compose build
+docker-compose pull
 ```
 
-and run it
-
-```bash
-docker-compose up -d
-```
 Generate application security salt and write it to `.env.cake` file, then restat application.
 
 ```bash
@@ -49,6 +44,12 @@ Create new user
 docker-compose run --rm cakenotify-app php bin/cake.php add_user -u your@email -p paSSw0rd
 ```
 
+and run it
+
+```bash
+docker-compose up -d
+```
+
 After this you can log in. Go to your user details for api_token. You will need it to change application status trough api.
 
 Next important thing is to add Twilio SMS configuration. You can get details on your Twilio account details.
@@ -60,7 +61,7 @@ Next important thing is to add Twilio SMS configuration. You can get details on 
 Fetch and pull repository changes then run:
 
 ```bash
-docker-compose build
+docker-compose pull
 ```
 
 and
