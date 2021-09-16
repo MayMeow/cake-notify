@@ -32,8 +32,8 @@
         "psr-4": {
             "App\\": "src/",
             "Api\\": "plugins/Api/src",
-            "Burzum\\CakeServiceLayer\\": "plugins/Services/src/"
-
+            "Burzum\\CakeServiceLayer\\": "plugins/Services/src/",
+            "Tools\\": "plugins/Tools/src"
         }
     },
     "autoload-dev": {

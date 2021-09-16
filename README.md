@@ -31,8 +31,19 @@ and run it
 ```bash
 docker-compose up -d
 ```
+Generate application security salt and write it to `.env.cake` file, then restat application.
 
-Application on start runs migrations automatically. Next you will need to create your user. Its not possible to creat it over web interface for now. You can add your user with cakephp console:
+```bash
+docker-compose run --rm cakenotify-app php bin/cake.php generate_salt
+```
+
+Now run migrations
+
+```bash
+docker-compose run --rm cakenotify-app php bin/cake.php migrations migrate
+```
+
+Create new user
 
 ```bash
 docker-compose run --rm cakenotify-app php bin/cake.php add_user -u your@email -p paSSw0rd
@@ -97,12 +108,12 @@ AUTH_TOKEN="<your-auth-token>"
 #  ... your commands here
 
 statuscode=$?
-curl -i --data state=${statuscode} -H "__token__:${AUTH_TOKEN}" https://${SERVER_URL}/api/v1/applications/create-log/${APP_ID}.json 
+curl -i --data state=${statuscode} -H "__token__:${AUTH_TOKEN}" https://${SERVER_URL}/api/v1/applications/create-log/${APP_ID}.json
 ```
 
 ## Run development server
 
-You will need to install docker / Docker desktop server to develop this application. Development dokcer contains custom app image for development [maymeow/php-ci-cd](https://github.com/MayMeow/php-ci-cd), 
+You will need to install docker / Docker desktop server to develop this application. Development dokcer contains custom app image for development [maymeow/php-ci-cd](https://github.com/MayMeow/php-ci-cd),
 postgres server and redis server.
 
 ```bash
